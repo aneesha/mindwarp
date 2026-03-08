@@ -15,6 +15,8 @@ import { Modal } from './Modal';
 import { MindMap as MindMapClass } from '../core/MindMap';
 import { createRootNode, createNode } from '../core/NodeFactory';
 import { ChatPanel } from './ChatPanel';
+import { ExportManager } from '../export/ExportManager';
+import { FileManager } from '../io/FileManager';
 import { AddNodeCommand } from '../core/commands/AddNodeCommand';
 import { DeleteNodeCommand } from '../core/commands/DeleteNodeCommand';
 
@@ -33,13 +35,8 @@ export class App {
   private contextMenu: ContextMenu;
   private themeManager: ThemeManager;
   private chatPanel!: ChatPanel;
-
-  // Hooks for export (set by external modules)
-  onExportPng?: () => void;
-  onExportDocx?: () => void;
-  onExportPptx?: () => void;
-  onSave?: () => void;
-  onLoad?: () => void;
+  private exportManager = new ExportManager();
+  private fileManager = new FileManager();
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -114,11 +111,11 @@ export class App {
       this.themeManager,
       {
         onNew: () => this.newMindmap(),
-        onSave: () => this.onSave?.(),
-        onLoad: () => this.onLoad?.(),
-        onExportPng: () => this.onExportPng?.(),
-        onExportDocx: () => this.onExportDocx?.(),
-        onExportPptx: () => this.onExportPptx?.(),
+        onSave: () => this.saveMindmap(),
+        onLoad: () => this.loadFromFile(),
+        onExportPng: () => this.exportPng(),
+        onExportDocx: () => this.exportDocx(),
+        onExportPptx: () => this.exportPptx(),
         onZoomToFit: () => this.canvasRenderer.zoomToFit(),
         onLoadAI: () => this.chatPanel.loadModel(),
       }
@@ -246,7 +243,7 @@ export class App {
         this.commandManager.redo();
       } else if ((e.ctrlKey || e.metaKey) && e.key === 's') {
         e.preventDefault();
-        this.onSave?.();
+        this.saveMindmap();
       } else if (e.key === 'Delete' || (e.key === 'Backspace' && !e.ctrlKey && !e.metaKey)) {
         const selected = this.canvasRenderer.getSelection().primary;
         if (selected && selected !== this.mindmap.root.id) {
@@ -318,5 +315,49 @@ export class App {
 
   getToolbar(): Toolbar {
     return this.toolbar;
+  }
+
+  // File I/O
+  private saveMindmap(): void {
+    this.fileManager.save(this.mindmap);
+    this.eventBus.emit('mindmap:saved');
+  }
+
+  private async loadFromFile(): Promise<void> {
+    try {
+      const mindmap = await this.fileManager.load();
+      this.loadMindmap(mindmap);
+      this.chatPanel.updateMindmap(mindmap);
+    } catch (err) {
+      if (err instanceof Error && err.message.includes('cancelled')) return;
+      const msg = err instanceof Error ? err.message : String(err);
+      await Modal.confirm('Load Error', msg);
+    }
+  }
+
+  // Exports
+  private async exportPng(): Promise<void> {
+    try {
+      const canvas = this.canvasContainer.querySelector('.mw-canvas') as HTMLElement;
+      if (canvas) await this.exportManager.exportPng(canvas);
+    } catch (err) {
+      console.error('PNG export failed:', err);
+    }
+  }
+
+  private async exportDocx(): Promise<void> {
+    try {
+      await this.exportManager.exportDocx(this.mindmap);
+    } catch (err) {
+      console.error('DOCX export failed:', err);
+    }
+  }
+
+  private async exportPptx(): Promise<void> {
+    try {
+      await this.exportManager.exportPptx(this.mindmap);
+    } catch (err) {
+      console.error('PPTX export failed:', err);
+    }
   }
 }
