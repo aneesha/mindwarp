@@ -1,0 +1,133 @@
+.mw-chat {
+  border-top: 1px solid var(--mw-chat-border);
+  background: var(--mw-chat-bg);
+  display: flex;
+  flex-direction: column;
+  max-height: 40vh;
+  transition: max-height 200ms ease;
+}
+
+.mw-chat.mw-collapsed {
+  max-height: 40px;
+}
+
+.mw-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mw-spacing-sm) var(--mw-spacing-lg);
+  cursor: pointer;
+  user-select: none;
+  min-height: 40px;
+}
+
+.mw-chat-header:hover {
+  background: var(--mw-bg-secondary);
+}
+
+.mw-chat-title {
+  font-size: var(--mw-font-size-sm);
+  font-weight: 600;
+  color: var(--mw-text-secondary);
+}
+
+.mw-chat-toggle {
+  font-size: var(--mw-font-size-xs);
+  color: var(--mw-text-muted);
+}
+
+.mw-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--mw-spacing-md) var(--mw-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mw-spacing-md);
+}
+
+.mw-chat-message {
+  max-width: 85%;
+  padding: var(--mw-spacing-sm) var(--mw-spacing-md);
+  border-radius: var(--mw-border-radius);
+  font-size: var(--mw-font-size-sm);
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.mw-chat-message.mw-user {
+  align-self: flex-end;
+  background: var(--mw-accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.mw-chat-message.mw-assistant {
+  align-self: flex-start;
+  background: var(--mw-bg-secondary);
+  color: var(--mw-text-primary);
+  border-bottom-left-radius: 4px;
+}
+
+.mw-chat-message.mw-system-msg {
+  align-self: center;
+  background: transparent;
+  color: var(--mw-text-muted);
+  font-size: var(--mw-font-size-xs);
+  font-style: italic;
+  padding: var(--mw-spacing-xs);
+}
+
+.mw-chat-input-area {
+  display: flex;
+  gap: var(--mw-spacing-sm);
+  padding: var(--mw-spacing-sm) var(--mw-spacing-lg) var(--mw-spacing-md);
+  border-top: 1px solid var(--mw-chat-border);
+}
+
+.mw-chat-input {
+  flex: 1;
+  padding: var(--mw-spacing-sm) var(--mw-spacing-md);
+  border: 1px solid var(--mw-chat-border);
+  border-radius: var(--mw-border-radius);
+  font-size: var(--mw-font-size-sm);
+  color: var(--mw-text-primary);
+  background: var(--mw-bg-primary);
+  outline: none;
+  resize: none;
+  max-height: 100px;
+  min-height: 36px;
+}
+
+.mw-chat-input:focus {
+  border-color: var(--mw-accent);
+  box-shadow: 0 0 0 2px var(--mw-accent-light);
+}
+
+.mw-chat-send {
+  padding: var(--mw-spacing-sm) var(--mw-spacing-md);
+  background: var(--mw-accent);
+  color: #fff;
+  border-radius: var(--mw-border-radius);
+  font-size: var(--mw-font-size-sm);
+  font-weight: 600;
+  transition: background var(--mw-transition);
+  white-space: nowrap;
+}
+
+.mw-chat-send:hover {
+  background: var(--mw-accent-hover);
+}
+
+.mw-chat-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mw-chat-empty {
+  color: var(--mw-text-muted);
+  font-size: var(--mw-font-size-sm);
+  text-align: center;
+  padding: var(--mw-spacing-xl);
+  font-style: italic;
+}

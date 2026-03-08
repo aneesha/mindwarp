@@ -14,6 +14,7 @@ import { ThemeManager } from './ThemeManager';
 import { Modal } from './Modal';
 import { MindMap as MindMapClass } from '../core/MindMap';
 import { createRootNode, createNode } from '../core/NodeFactory';
+import { ChatPanel } from './ChatPanel';
 import { AddNodeCommand } from '../core/commands/AddNodeCommand';
 import { DeleteNodeCommand } from '../core/commands/DeleteNodeCommand';
 
@@ -31,15 +32,14 @@ export class App {
   private toolbar!: Toolbar;
   private contextMenu: ContextMenu;
   private themeManager: ThemeManager;
+  private chatPanel!: ChatPanel;
 
-  // Hooks for AI and export (set by external modules)
-  onLoadAI?: () => void;
+  // Hooks for export (set by external modules)
   onExportPng?: () => void;
   onExportDocx?: () => void;
   onExportPptx?: () => void;
   onSave?: () => void;
   onLoad?: () => void;
-  onBotMention?: (nodeId: string, prompt: string) => void;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -81,7 +81,7 @@ export class App {
     // Markdown editor
     this.markdownEditor = new MarkdownEditor(this.mindmap, this.commandManager);
     this.markdownEditor.onBotMention = (nodeId, prompt) => {
-      this.onBotMention?.(nodeId, prompt);
+      this.chatPanel?.sendBotMention(nodeId, prompt);
     };
 
     // Canvas renderer with markdown rendering
@@ -120,8 +120,17 @@ export class App {
         onExportDocx: () => this.onExportDocx?.(),
         onExportPptx: () => this.onExportPptx?.(),
         onZoomToFit: () => this.canvasRenderer.zoomToFit(),
-        onLoadAI: () => this.onLoadAI?.(),
+        onLoadAI: () => this.chatPanel.loadModel(),
       }
+    );
+
+    // Chat panel
+    this.chatPanel = new ChatPanel(
+      this.chatContainer,
+      this.eventBus,
+      this.mindmap,
+      this.commandManager,
+      this.layoutManager
     );
   }
 
@@ -195,7 +204,7 @@ export class App {
     this.canvasContainer.innerHTML = '';
     this.markdownEditor = new MarkdownEditor(this.mindmap, this.commandManager);
     this.markdownEditor.onBotMention = (nodeId, prompt) => {
-      this.onBotMention?.(nodeId, prompt);
+      this.chatPanel?.sendBotMention(nodeId, prompt);
     };
 
     this.layoutManager = new LayoutManager(this.mindmap, this.eventBus);
