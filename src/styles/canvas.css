@@ -1,0 +1,224 @@
+.mw-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  background:
+    radial-gradient(circle, var(--mw-node-border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.mw-canvas.mw-panning {
+  cursor: grabbing;
+}
+
+.mw-canvas.mw-dragging-node {
+  cursor: move;
+}
+
+.mw-connections-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+.mw-viewport {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  z-index: 2;
+}
+
+.mw-nodes-layer {
+  position: relative;
+}
+
+/* Node element */
+.mw-node {
+  position: absolute;
+  min-width: 120px;
+  max-width: 320px;
+  background: var(--mw-node-bg);
+  border: 2px solid var(--mw-node-border);
+  border-radius: var(--mw-border-radius);
+  box-shadow: var(--mw-node-shadow);
+  transition: box-shadow var(--mw-transition);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mw-node:hover {
+  box-shadow: var(--mw-node-shadow-hover);
+}
+
+.mw-node.mw-selected {
+  box-shadow: var(--mw-node-shadow-selected);
+}
+
+.mw-node.mw-dragging {
+  opacity: 0.85;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.mw-node.mw-root {
+  min-width: 160px;
+}
+
+.mw-node-content {
+  padding: var(--mw-spacing-md);
+  min-height: 28px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+}
+
+.mw-node-content p {
+  margin: 0 0 var(--mw-spacing-xs);
+}
+
+.mw-node-content p:last-child {
+  margin-bottom: 0;
+}
+
+.mw-node-content code {
+  font-family: var(--mw-font-mono);
+  font-size: var(--mw-font-size-sm);
+  background: var(--mw-bg-secondary);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.mw-node-content pre {
+  background: var(--mw-bg-secondary);
+  padding: var(--mw-spacing-sm);
+  border-radius: var(--mw-border-radius-sm);
+  overflow-x: auto;
+  margin: var(--mw-spacing-xs) 0;
+}
+
+.mw-node-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.mw-node-content a {
+  color: var(--mw-accent);
+  text-decoration: none;
+}
+
+.mw-node-content a:hover {
+  text-decoration: underline;
+}
+
+.mw-node-actions {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: none;
+  gap: 4px;
+}
+
+.mw-node:hover .mw-node-actions,
+.mw-node.mw-selected .mw-node-actions {
+  display: flex;
+}
+
+.mw-node-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  transition: transform var(--mw-transition);
+}
+
+.mw-node-btn:hover {
+  transform: scale(1.15);
+}
+
+.mw-btn-add-child {
+  background: var(--mw-success);
+}
+
+.mw-btn-collapse {
+  background: var(--mw-warning);
+}
+
+.mw-btn-delete {
+  background: var(--mw-danger);
+}
+
+/* Collapse indicator */
+.mw-collapse-badge {
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  background: var(--mw-warning);
+  border-radius: 50%;
+  color: #fff;
+  font-size: var(--mw-font-size-xs);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Connection path */
+.mw-connection {
+  fill: none;
+  stroke: var(--mw-connection-color);
+  stroke-width: var(--mw-connection-width);
+  stroke-linecap: round;
+}
+
+/* Zoom controls */
+.mw-zoom-controls {
+  position: absolute;
+  bottom: var(--mw-spacing-lg);
+  right: var(--mw-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--mw-spacing-xs);
+  z-index: 50;
+}
+
+.mw-zoom-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--mw-toolbar-bg);
+  border: 1px solid var(--mw-toolbar-border);
+  border-radius: var(--mw-border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--mw-font-size-lg);
+  color: var(--mw-text-primary);
+  transition: background var(--mw-transition);
+}
+
+.mw-zoom-btn:hover {
+  background: var(--mw-bg-secondary);
+}
+
+.mw-zoom-level {
+  text-align: center;
+  font-size: var(--mw-font-size-xs);
+  color: var(--mw-text-secondary);
+  padding: var(--mw-spacing-xs) 0;
+}
