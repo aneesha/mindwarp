@@ -12,6 +12,35 @@ export { EditNodeCommand } from './core/commands/EditNodeCommand';
 export { MoveNodeCommand } from './core/commands/MoveNodeCommand';
 export { BatchCommand } from './core/commands/BatchCommand';
 
+// Layout
+export { TreeRightLayout } from './layout/TreeRightLayout';
+export { RadialLayout } from './layout/RadialLayout';
+export { LayoutManager } from './layout/LayoutManager';
+
+// Canvas
+export { CanvasRenderer } from './canvas/CanvasRenderer';
+export { PanZoom } from './canvas/PanZoom';
+export { SelectionManager } from './canvas/SelectionManager';
+
+// Editor
+export { renderMarkdown } from './editor/MarkdownRenderer';
+export { MarkdownEditor } from './editor/MarkdownEditor';
+
+// AI
+export { ModelService } from './ai/ModelService';
+export { ChatService } from './ai/ChatService';
+export { AIMediatorService } from './ai/AIMediatorService';
+
+// IO
+export { FileManager } from './io/FileManager';
+export { validateMindMapData } from './io/Serializer';
+
+// Export
+export { ExportManager } from './export/ExportManager';
+
+// UI
+export { App } from './ui/App';
+
 // Types
 export type {
   Position,

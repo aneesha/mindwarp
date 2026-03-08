@@ -75,6 +75,7 @@ export class Toolbar {
     // Layout dropdown
     const layoutDropdown = this.createDropdown('Layout', [
       { label: 'Tree Right', action: () => { this.layoutManager.setStrategy('tree-right'); this.layoutManager.applyLayout(); } },
+      { label: 'Radial', action: () => { this.layoutManager.setStrategy('radial'); this.layoutManager.applyLayout(); } },
     ]);
     toolbar.appendChild(layoutDropdown);
 

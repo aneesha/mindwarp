@@ -2,6 +2,7 @@ import type { ILayoutStrategy } from '../types';
 import type { MindMap } from '../core/MindMap';
 import type { EventBus } from '../core/EventBus';
 import { TreeRightLayout } from './TreeRightLayout';
+import { RadialLayout } from './RadialLayout';
 import type { LayoutName } from './LayoutStrategy';
 
 export class LayoutManager {
@@ -16,7 +17,9 @@ export class LayoutManager {
     this.strategies = new Map();
 
     const treeRight = new TreeRightLayout();
+    const radial = new RadialLayout();
     this.strategies.set(treeRight.name, treeRight);
+    this.strategies.set(radial.name, radial);
     this.strategy = treeRight;
   }
 
